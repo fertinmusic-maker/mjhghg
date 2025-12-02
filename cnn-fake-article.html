@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Breaking News: Major Flooding Devastates Central Europe - CNN</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📰</text></svg>" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'CNN Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #262626;
+      line-height: 1.6;
+    }
+    
+    .breaking-banner {
+      background: #cc0000;
+      color: #ffffff;
+      padding: 8px 0;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+    
+    header {
+      background: #000000;
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #cc0000;
+      letter-spacing: -2px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .nav-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    
+    .nav-link:hover {
+      color: #cc0000;
+    }
+    
+    .article-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+    
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    
+    .category {
+      background: #cc0000;
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+    
+    .article-headline {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: #000000;
+    }
+    
+    .article-subheadline {
+      font-size: 1.3rem;
+      color: #666;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #cc0000, #8b0000);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    
+    .author-details {
+      flex: 1;
+    }
+    
+    .author-name {
+      font-weight: 700;
+      color: #000000;
+    }
+    
+    .publish-date {
+      font-size: 0.85rem;
+      color: #666;
+    }
+    
+    .featured-image {
+      width: 100%;
+      height: 450px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .featured-video {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: block;
+      max-height: 500px;
+    }
+    
+    .image-caption {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+    
+    .article-body {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #262626;
+    }
+    
+    .article-body p {
+      margin-bottom: 24px;
+    }
+    
+    .article-body strong {
+      font-weight: 700;
+      color: #000000;
+    }
+    
+    .article-body em {
+      font-style: italic;
+    }
+    
+    .breaking-box {
+      background: #fff5f5;
+      border-left: 4px solid #cc0000;
+      padding: 20px;
+      margin: 32px 0;
+      border-radius: 4px;
+    }
+    
+    .breaking-box-title {
+      font-weight: 700;
+      color: #cc0000;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+    
+    .quote-box {
+      background: #f5f5f5;
+      padding: 24px;
+      margin: 32px 0;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: #333;
+      position: relative;
+    }
+    
+    .quote-box::before {
+      content: '"';
+      font-size: 4rem;
+      color: #cc0000;
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      opacity: 0.3;
+    }
+    
+    .share-bar {
+      display: flex;
+      gap: 12px;
+      padding: 24px 0;
+      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e0e0e0;
+      margin: 32px 0;
+    }
+    
+    .share-btn {
+      padding: 10px 20px;
+      border: 1px solid #e0e0e0;
+      background: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .share-btn:hover {
+      background: #f5f5f5;
+      border-color: #cc0000;
+      color: #cc0000;
+    }
+    
+    .related-articles {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid #000000;
+    }
+    
+    .related-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    
+    .related-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    
+    .related-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .related-card-image {
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+    
+    .related-card-content {
+      padding: 16px;
+    }
+    
+    .related-card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.3;
+      color: #000000;
+    }
+    
+    footer {
+      background: #000000;
+      color: #ffffff;
+      padding: 32px 20px;
+      margin-top: 64px;
+      text-align: center;
+    }
+    
+    .footer-text {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+    
+    .donation-box {
+      background: linear-gradient(135deg, #cc0000 0%, #8b0000 100%);
+      color: #ffffff;
+      padding: 32px;
+      border-radius: 16px;
+      margin: 32px 0;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(204, 0, 0, 0.3);
+    }
+    
+    .donation-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .donation-text {
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    
+    .donation-btn {
+      background: #ffffff;
+      color: #cc0000;
+      padding: 16px 48px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .donation-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    }
+    
+    .donation-match {
+      margin-top: 16px;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    
+    @media (max-width: 768px) {
+      .article-headline {
+        font-size: 2rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .featured-image {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="breaking-banner">
+    🚨 BREAKING NEWS 🚨
+  </div>
+  
+  <header>
+    <div class="header-content">
+      <div class="logo">CNN</div>
+      <nav class="nav-links">
+        <a href="#" class="nav-link">World</a>
+        <a href="#" class="nav-link">Politics</a>
+        <a href="#" class="nav-link">Business</a>
+        <a href="#" class="nav-link">Tech</a>
+        <a href="#" class="nav-link">Entertainment</a>
+      </nav>
+    </div>
+  </header>
+  
+  <main class="article-container">
+    <div class="article-meta">
+      <span class="category">BREAKING NEWS</span>
+      <span>Published 1 hour ago</span>
+    </div>
+    
+    <h1 class="article-headline">
+      Catastrophic Floods Devastate Central Europe as Thousands Evacuated
+    </h1>
+    
+    <p class="article-subheadline">
+      Unprecedented rainfall triggers massive flooding across region; emergency services overwhelmed as infrastructure crumbles
+    </p>
+    
+    <div class="author-info">
+      <div class="author-avatar">JD</div>
+      <div class="author-details">
+        <div class="author-name">John Davidson</div>
+        <div class="publish-date">Updated 2:15 PM CET, December 18, 2024</div>
+      </div>
+    </div>
+    
+    <video class="featured-video" controls autoplay muted>
+      <source src="cnn.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    
+    <p class="image-caption">
+      Video: CNN's exclusive footage shows the devastating impact of record-breaking floods across Central Europe. (CNN International)
+    </p>
+    
+    <div class="donation-box">
+      <div class="donation-title">🚨 HELP FLOOD VICTIMS NOW 🚨</div>
+      <div class="donation-text">
+        Thousands of families are stranded without food, water, or shelter.<br>
+        Your donation can save lives. CNN will MATCH all donations in the next 24 hours!
+      </div>
+      <a href="fake-charity-donation.html" class="donation-btn">DONATE NOW →</a>
+      <div class="donation-match">
+        ⚡ Limited Time: All donations DOUBLED by CNN ⚡
+      </div>
+    </div>
+    
+    <div class="article-body">
+      <p>
+        <strong>CENTRAL EUROPE</strong> — Catastrophic flooding has engulfed multiple regions across Central Europe following days of relentless rainfall, forcing emergency evacuations of tens of thousands of residents as rivers burst their banks and critical infrastructure collapses under the unprecedented deluge. Emergency response teams are working around the clock as entire neighborhoods remain submerged, with authorities warning that the worst may still be ahead as water levels continue to rise.
+      </p>
+      
+      <div class="breaking-box">
+        <div class="breaking-box-title">⚠️ Critical Alert</div>
+        <p><strong>WARNING:</strong> Scammers are exploiting this disaster by sending fake charity emails. Always verify donation appeals through official CNN channels. Legitimate CNN relief efforts are coordinated through secure, verified platforms only.</p>
+      </div>
+      
+      <p>
+        The devastating floods, described by meteorologists as a once-in-a-century weather event, have overwhelmed emergency services across the region. Rescue helicopters continue airlifting stranded residents from rooftops while boats navigate through what were once bustling city streets.
+      </p>
+      
+      <p>
+        <strong>"This is an absolute catastrophe,"</strong> said Dr. Helena Schmidt, Director of the Regional Emergency Management Agency, in an exclusive interview with CNN. "We've never seen flooding on this scale. Entire communities are underwater, and we're racing against time to reach those still trapped."
+      </p>
+      
+      <div class="quote-box">
+        The situation is evolving rapidly. Our priority is saving lives and getting people to safety. The infrastructure damage is severe and will take months, possibly years, to repair.
+      </div>
+      
+      <p>
+        As shown in our exclusive video report above, major highways have been transformed into raging rivers, with abandoned vehicles partially submerged. Critical bridges have collapsed, cutting off access to several towns and hampering rescue efforts.
+      </p>
+      
+      <p>
+        Emergency shelters across the region are operating at full capacity, housing thousands of displaced families who fled with only the belongings they could carry. International aid organizations have mobilized relief efforts, but access to many affected areas remains severely limited.
+      </p>
+      
+      <p>
+        <strong>Key developments:</strong>
+      </p>
+      
+      <p>
+        <strong>1.</strong> Mass evacuations underway in flood-affected regions<br>
+        <strong>2.</strong> Major infrastructure collapse reported across multiple areas<br>
+        <strong>3.</strong> Emergency services operating at maximum capacity<br>
+        <strong>4.</strong> International aid and rescue teams deployed<br>
+        <strong>5.</strong> Weather alerts remain in effect with more rain forecast
+      </p>
+      
+      <div class="breaking-box">
+        <div class="breaking-box-title">🚨 Scam Alert: Protect Yourself</div>
+        <p><strong>Criminals are targeting disaster victims:</strong> Be aware of fake emergency aid emails claiming to be from government agencies. These scams use fear and urgency to steal personal information and money. Legitimate agencies will NEVER ask for banking details via email or request immediate verification through suspicious links. Report all suspicious communications to authorities.</p>
+      </div>
+      
+      <p>
+        Power outages have affected vast areas, leaving communities in darkness while contaminated water supplies pose additional health risks. Medical teams are on high alert for potential disease outbreaks in evacuation centers.
+      </p>
+      
+      <p>
+        Regional governors have declared states of emergency, mobilizing military personnel to assist with rescue operations and the distribution of essential supplies. However, the sheer scale of the disaster has stretched resources to their limits.
+      </p>
+      
+      <p>
+        <strong>"We're seeing opportunistic criminals exploiting this tragedy,"</strong> warned Cybercrime Unit Chief Inspector Maria Torres. "Fake charity appeals and fraudulent government assistance emails are already circulating. People must verify all communications through official government websites only."
+      </p>
+      
+      <p>
+        Meteorologists attribute the catastrophic flooding to an unprecedented atmospheric pattern that has stalled over the region, dumping record rainfall. Climate scientists warn that such extreme weather events are becoming more frequent and intense.
+      </p>
+      
+      <p>
+        International leaders have expressed solidarity and pledged support, with emergency aid shipments already en route. The European Union has activated its crisis response mechanism to coordinate the multinational relief effort.
+      </p>
+      
+      <p>
+        As rescue operations continue through the night, the full extent of the disaster remains unknown. Authorities urge residents in at-risk areas to heed evacuation orders immediately and stay informed through official channels only.
+      </p>
+      
+      <p>
+        <em>This is a developing story. Watch the video above for the latest updates on this unprecedented natural disaster. CNN will continue to provide live coverage as the situation unfolds.</em>
+      </p>
+    </div>
+    
+    <div class="share-bar">
+      <button class="share-btn">📱 Share</button>
+      <button class="share-btn">🔗 Copy Link</button>
+      <button class="share-btn">📧 Email</button>
+    </div>
+    
+    <div class="related-articles">
+      <h2 class="related-title">Related Coverage</h2>
+      <div class="related-grid">
+        <div class="related-card">
+          <div class="related-card-image">💧</div>
+          <div class="related-card-content">
+            <div class="related-card-title">Emergency Services Overwhelmed as Flood Waters Continue to Rise</div>
+          </div>
+        </div>
+        
+        <div class="related-card">
+          <div class="related-card-image">🚨</div>
+          <div class="related-card-content">
+            <div class="related-card-title">How to Spot Disaster Relief Scams Targeting Flood Victims</div>
+          </div>
+        </div>
+        
+        <div class="related-card">
+          <div class="related-card-image">🌍</div>
+          <div class="related-card-content">
+            <div class="related-card-title">Climate Experts: Extreme Weather Events Becoming More Frequent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="footer-text">
+      © 2024 Cable News Network. A Warner Bros. Discovery Company. All Rights Reserved.<br>
+      CNN Sans ™ & © 2016 Cable News Network.
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>X</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>𝕏</text></svg>" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #000000;
+      color: #e7e9ea;
+      line-height: 1.5;
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 275px;
+      padding: 0 12px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid #2f3336;
+    }
+    
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin: 4px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    
+    .logo:hover {
+      background: rgba(231, 233, 234, 0.1);
+    }
+    
+    .nav-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 12px 16px;
+      font-size: 1.25rem;
+      font-weight: 400;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: #e7e9ea;
+    }
+    
+    .nav-item:hover {
+      background: rgba(231, 233, 234, 0.1);
+    }
+    
+    .nav-item.active {
+      font-weight: 700;
+    }
+    
+    .nav-icon {
+      font-size: 1.6rem;
+      width: 26px;
+      text-align: center;
+    }
+    
+    .post-btn {
+      margin-top: 16px;
+      background: #1d9bf0;
+      color: #ffffff;
+      border: none;
+      border-radius: 24px;
+      padding: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .post-btn:hover {
+      background: #1a8cd8;
+    }
+    
+    .user-menu {
+      margin-top: auto;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .user-menu:hover {
+      background: rgba(231, 233, 234, 0.1);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1d9bf0 0%, #0088cc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .user-info {
+      flex: 1;
+    }
+    
+    .user-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    
+    .user-handle {
+      color: #71767b;
+      font-size: 0.95rem;
+    }
+    
+    /* Main Feed */
+    .main-feed {
+      flex: 1;
+      max-width: 600px;
+      border-right: 1px solid #2f3336;
+    }
+    
+    .feed-header {
+      padding: 16px;
+      border-bottom: 1px solid #2f3336;
+      position: sticky;
+      top: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+    
+    .feed-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .feed-tabs {
+      display: flex;
+      border-bottom: 1px solid #2f3336;
+    }
+    
+    .feed-tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      position: relative;
+    }
+    
+    .feed-tab:hover {
+      background: rgba(231, 233, 234, 0.1);
+    }
+    
+    .feed-tab.active {
+      font-weight: 700;
+    }
+    
+    .feed-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: #1d9bf0;
+      border-radius: 4px 4px 0 0;
+    }
+    
+    .compose-tweet {
+      padding: 16px;
+      border-bottom: 1px solid #2f3336;
+      display: flex;
+      gap: 12px;
+    }
+    
+    .compose-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #e7e9ea;
+      font-size: 1.25rem;
+      outline: none;
+      font-family: inherit;
+      resize: none;
+    }
+    
+    .compose-input::placeholder {
+      color: #71767b;
+    }
+    
+    .compose-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px 12px;
+      border-bottom: 1px solid #2f3336;
+    }
+    
+    .compose-icons {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .compose-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #1d9bf0;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    
+    .compose-icon:hover {
+      background: rgba(29, 155, 240, 0.1);
+    }
+    
+    .compose-btn {
+      background: #1d9bf0;
+      color: #ffffff;
+      border: none;
+      border-radius: 18px;
+      padding: 8px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .compose-btn:hover {
+      background: #1a8cd8;
+    }
+    
+    /* Tweet */
+    .tweet {
+      padding: 16px;
+      border-bottom: 1px solid #2f3336;
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .tweet:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .tweet-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .tweet-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .tweet-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    
+    .tweet-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    
+    .tweet-verified {
+      color: #1d9bf0;
+      font-size: 1.1rem;
+    }
+    
+    .tweet-handle {
+      color: #71767b;
+      font-size: 0.95rem;
+    }
+    
+    .tweet-time {
+      color: #71767b;
+      font-size: 0.95rem;
+    }
+    
+    .tweet-text {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      word-wrap: break-word;
+    }
+    
+    .tweet-image {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    
+    .tweet-actions {
+      display: flex;
+      justify-content: space-between;
+      max-width: 425px;
+      margin-top: 4px;
+    }
+    
+    .tweet-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #71767b;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 8px;
+      border-radius: 50%;
+    }
+    
+    .tweet-action:hover {
+      color: #1d9bf0;
+    }
+    
+    .tweet-action.liked {
+      color: #f91880;
+    }
+    
+    .tweet-action.retweeted {
+      color: #00ba7c;
+    }
+    
+    /* Right Sidebar */
+    .right-sidebar {
+      width: 350px;
+      padding: 0 16px;
+    }
+    
+    .search-box {
+      position: sticky;
+      top: 0;
+      padding: 8px 0;
+      background: #000000;
+      z-index: 10;
+    }
+    
+    .search-input {
+      width: 100%;
+      background: #202327;
+      border: 1px solid transparent;
+      border-radius: 24px;
+      padding: 12px 16px;
+      color: #e7e9ea;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    
+    .search-input:focus {
+      background: #000000;
+      border-color: #1d9bf0;
+    }
+    
+    .search-input::placeholder {
+      color: #71767b;
+    }
+    
+    .trending-card {
+      background: #16181c;
+      border-radius: 16px;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+    
+    .trending-header {
+      padding: 16px;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .trending-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .trending-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    .trending-category {
+      color: #71767b;
+      font-size: 0.8rem;
+    }
+    
+    .trending-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin: 4px 0;
+    }
+    
+    .trending-count {
+      color: #71767b;
+      font-size: 0.8rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .right-sidebar {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 68px;
+      }
+      
+      .nav-text {
+        display: none;
+      }
+      
+      .post-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        padding: 0;
+        font-size: 1.5rem;
+      }
+      
+      .user-info {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">𝕏</div>
+      
+      <nav class="nav-items">
+        <a class="nav-item active">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">Home</span>
+        </a>
+        <a class="nav-item">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-text">Explore</span>
+        </a>
+        <a class="nav-item">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-text">Notifications</span>
+        </a>
+        <a class="nav-item">
+          <span class="nav-icon">✉️</span>
+          <span class="nav-text">Messages</span>
+        </a>
+        <a class="nav-item">
+          <span class="nav-icon">📋</span>
+          <span class="nav-text">Lists</span>
+        </a>
+        <a class="nav-item">
+          <span class="nav-icon">🔖</span>
+          <span class="nav-text">Bookmarks</span>
+        </a>
+        <a class="nav-item">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Profile</span>
+        </a>
+      </nav>
+      
+      <button class="post-btn">Post</button>
+      
+      <div class="user-menu">
+        <div class="user-avatar" style="background-image: url('https://i.pravatar.cc/150?img=67');"></div>
+        <div class="user-info">
+          <div class="user-name">Michael Chen</div>
+          <div class="user-handle">@mchen</div>
+        </div>
+        <span style="font-size: 1.2rem;">⋯</span>
+      </div>
+    </aside>
+    
+    <!-- Main Feed -->
+    <main class="main-feed">
+      <div class="feed-header">
+        <div class="feed-title">Home</div>
+      </div>
+      
+      <div class="feed-tabs">
+        <div class="feed-tab active">For you</div>
+        <div class="feed-tab">Following</div>
+      </div>
+      
+      <div class="compose-tweet">
+        <div class="user-avatar" style="background-image: url('https://i.pravatar.cc/150?img=67');"></div>
+        <textarea class="compose-input" placeholder="What is happening?!" rows="2"></textarea>
+      </div>
+      
+      <div class="compose-actions">
+        <div class="compose-icons">
+          <div class="compose-icon">🖼️</div>
+          <div class="compose-icon">📊</div>
+          <div class="compose-icon">😊</div>
+          <div class="compose-icon">📅</div>
+        </div>
+        <button class="compose-btn">Post</button>
+      </div>
+      
+      <!-- Tweets -->
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=33');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Elon Chang</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@elonchang</span>
+            <span>·</span>
+            <span class="tweet-time">2h</span>
+          </div>
+          <div class="tweet-text">
+            Just announced our new Mars mission! 🚀 Launch scheduled for 2026. This is going to change everything. #SpaceX #Mars
+          </div>
+          <img src="https://picsum.photos/600/400?random=1" style="width: 100%; border-radius: 16px; margin: 12px 0; display: block; object-fit: cover;" alt="Space rocket">
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>1.2K</span></div>
+            <div class="tweet-action">🔁 <span>8.5K</span></div>
+            <div class="tweet-action">❤️ <span>42.1K</span></div>
+            <div class="tweet-action">📊 <span>2.3M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=27');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Tech News Daily</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@technews</span>
+            <span>·</span>
+            <span class="tweet-time">4h</span>
+          </div>
+          <div class="tweet-text">
+            BREAKING: New AI model achieves human-level performance on complex reasoning tasks. The future is here! 🤖💡
+            
+            Read more: technews.com/ai-breakthrough
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>892</span></div>
+            <div class="tweet-action retweeted">🔁 <span>3.2K</span></div>
+            <div class="tweet-action liked">❤️ <span>15.7K</span></div>
+            <div class="tweet-action">📊 <span>890K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=45');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Sarah Johnson</span>
+            <span class="tweet-handle">@sarahjay</span>
+            <span>·</span>
+            <span class="tweet-time">6h</span>
+          </div>
+          <div class="tweet-text">
+            Just finished reading "The Midnight Library" and I'm absolutely blown away. 📚✨ Has anyone else read it? Need to discuss!
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>45</span></div>
+            <div class="tweet-action">🔁 <span>12</span></div>
+            <div class="tweet-action">❤️ <span>234</span></div>
+            <div class="tweet-action">📊 <span>8.9K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- NEW MEME POSTS -->
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=22');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Meme Lord</span>
+            <span class="tweet-handle">@memelord_official</span>
+            <span>·</span>
+            <span class="tweet-time">5h</span>
+          </div>
+          <div class="tweet-text">
+            When you finally understand the code you wrote 6 months ago 😂
+            
+            *surprised pikachu face*
+          </div>
+          <img src="https://picsum.photos/600/400?random=10" style="width: 100%; border-radius: 16px; margin: 12px 0; display: block; object-fit: cover;" alt="Programming meme">
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>3.2K</span></div>
+            <div class="tweet-action">🔁 <span>15.8K</span></div>
+            <div class="tweet-action">❤️ <span>67.4K</span></div>
+            <div class="tweet-action">📊 <span>1.8M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=36');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Daily Memes</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@dailymemes</span>
+            <span>·</span>
+            <span class="tweet-time">5h</span>
+          </div>
+          <div class="tweet-text">
+            POV: You just realized it's Monday tomorrow 💀
+            
+            The weekend went by way too fast 😭
+          </div>
+          <img src="https://picsum.photos/600/400?random=11" style="width: 100%; border-radius: 16px; margin: 12px 0; display: block; object-fit: cover;" alt="Monday meme">
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>4.5K</span></div>
+            <div class="tweet-action">🔁 <span>28.3K</span></div>
+            <div class="tweet-action">❤️ <span>98.7K</span></div>
+            <div class="tweet-action">📊 <span>2.4M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=18');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Funny Tweets</span>
+            <span class="tweet-handle">@funnytweets247</span>
+            <span>·</span>
+            <span class="tweet-time">4h</span>
+          </div>
+          <div class="tweet-text">
+            Me: "I should go to bed early tonight"
+            
+            Me at 3am: *watching random YouTube videos about how submarines work*
+            
+            Every. Single. Time. 😴🤦‍♂️
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>2.1K</span></div>
+            <div class="tweet-action">🔁 <span>12.4K</span></div>
+            <div class="tweet-action">❤️ <span>45.6K</span></div>
+            <div class="tweet-action">📊 <span>987K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=29');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Comedy Central</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@comedycentral</span>
+            <span>·</span>
+            <span class="tweet-time">4h</span>
+          </div>
+          <div class="tweet-text">
+            Teacher: "You can't hear pictures"
+            
+            Me: *shows this image*
+            
+            If you know, you know 😂👀
+          </div>
+          <img src="https://picsum.photos/600/400?random=12" style="width: 100%; border-radius: 16px; margin: 12px 0; display: block; object-fit: cover;" alt="Relatable meme">
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>5.7K</span></div>
+            <div class="tweet-action">🔁 <span>34.2K</span></div>
+            <div class="tweet-action">❤️ <span>112.5K</span></div>
+            <div class="tweet-action">📊 <span>3.1M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ELON MUSK GIVEAWAY POST WITH CUSTOM PROFILE PICTURE -->
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('1691166857-814mI0-rkxL.avif'); background-size: cover; background-position: center;"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Elon Musk</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@elonmusk</span>
+            <span>·</span>
+            <span class="tweet-time">3h</span>
+          </div>
+          <div class="tweet-text">
+            🎁 GIVEAWAY FOR EVERYONE! 🎁
+            
+            To celebrate reaching 200M followers, I WILL DOUBLE any Bitcoin sent to this address! Send any amount and get 2X back instantly!
+            
+            Bitcoin Address:
+            bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+            
+            Limited time only! ⚡ I will personally DOUBLE every transaction!
+          </div>
+          <video 
+            style="width: 100%; max-width: 250px; border-radius: 12px; margin: 12px 0; display: block;" 
+            controls 
+            poster=""
+          >
+            <source src="elon.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>8.9K</span></div>
+            <div class="tweet-action">🔁 <span>45.2K</span></div>
+            <div class="tweet-action">❤️ <span>156.8K</span></div>
+            <div class="tweet-action">📊 <span>12.4M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=68');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Crypto News</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@cryptonews247</span>
+            <span>·</span>
+            <span class="tweet-time">8h</span>
+          </div>
+          <div class="tweet-text">
+            🚨 ALERT: Bitcoin just hit $50,000! 
+            
+            Many analysts predict it could reach $100K by end of year. Are you buying the dip or selling? 
+            
+            #Bitcoin #Crypto #BTC
+          </div>
+          <img src="https://picsum.photos/600/400?random=2" style="width: 100%; border-radius: 16px; margin: 12px 0; display: block; object-fit: cover;" alt="Bitcoin chart">
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>2.1K</span></div>
+            <div class="tweet-action">🔁 <span>5.8K</span></div>
+            <div class="tweet-action">❤️ <span>18.3K</span></div>
+            <div class="tweet-action">📊 <span>1.2M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=20');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Maria Patel</span>
+            <span class="tweet-handle">@mariap</span>
+            <span>·</span>
+            <span class="tweet-time">12h</span>
+          </div>
+          <div class="tweet-text">
+            Coffee ☕, code 💻, repeat 🔁
+            
+            Day 47 of my #100DaysOfCode challenge. Built a full-stack app today! Check it out: github.com/maria/project
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>67</span></div>
+            <div class="tweet-action">🔁 <span>89</span></div>
+            <div class="tweet-action">❤️ <span>456</span></div>
+            <div class="tweet-action">📊 <span>12.4K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=52');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">David Kim</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@davidkim</span>
+            <span>·</span>
+            <span class="tweet-time">14h</span>
+          </div>
+          <div class="tweet-text">
+            New album dropping tonight at midnight! 🎵🔥 This has been my most personal project yet. Can't wait for you all to hear it.
+            
+            Pre-save link in bio 🎧
+          </div>
+          <img src="https://picsum.photos/600/400?random=3" style="width: 100%; border-radius: 16px; margin: 12px 0; display: block; object-fit: cover;" alt="Music studio">
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>3.4K</span></div>
+            <div class="tweet-action">🔁 <span>12.8K</span></div>
+            <div class="tweet-action">❤️ <span>67.2K</span></div>
+            <div class="tweet-action">📊 <span>4.5M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=38');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Emma Rodriguez</span>
+            <span class="tweet-handle">@emmarodz</span>
+            <span>·</span>
+            <span class="tweet-time">16h</span>
+          </div>
+          <div class="tweet-text">
+            Anyone else feel like Mondays should be optional? ☕😴
+            
+            Need all the caffeine today. How's everyone doing?
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>234</span></div>
+            <div class="tweet-action">🔁 <span>89</span></div>
+            <div class="tweet-action">❤️ <span>1.2K</span></div>
+            <div class="tweet-action">📊 <span>45.7K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=59');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Gaming News HQ</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@gamingnewshq</span>
+            <span>·</span>
+            <span class="tweet-time">18h</span>
+          </div>
+          <div class="tweet-text">
+            BREAKING: New console generation announced! 🎮
+            
+            - 8K gaming at 120fps
+            - 2TB SSD storage
+            - Backwards compatible
+            - $599 price point
+            
+            Pre-orders start next month!
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>5.6K</span></div>
+            <div class="tweet-action">🔁 <span>18.3K</span></div>
+            <div class="tweet-action">❤️ <span>42.9K</span></div>
+            <div class="tweet-action">📊 <span>2.1M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=41');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Jennifer Lee</span>
+            <span class="tweet-handle">@jenniferlee</span>
+            <span>·</span>
+            <span class="tweet-time">20h</span>
+          </div>
+          <div class="tweet-text">
+            Just got back from an amazing hike! 🏔️ Nature really is the best therapy. The views were absolutely breathtaking today.
+            
+            Remember to take care of your mental health, friends! 💚
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>156</span></div>
+            <div class="tweet-action">🔁 <span>234</span></div>
+            <div class="tweet-action">❤️ <span>2.3K</span></div>
+            <div class="tweet-action">📊 <span>67.8K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=15');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Tech Startup News</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@techstartups</span>
+            <span>·</span>
+            <span class="tweet-time">22h</span>
+          </div>
+          <div class="tweet-text">
+            🚀 FUNDING ALERT: AI startup raises $150M Series B
+            
+            The company plans to use funds to:
+            - Expand team to 500+
+            - Launch new products
+            - Enter European market
+            
+            Valuation now at $1.2B 💰
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>892</span></div>
+            <div class="tweet-action">🔁 <span>2.4K</span></div>
+            <div class="tweet-action">❤️ <span>8.7K</span></div>
+            <div class="tweet-action">📊 <span>567K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=49');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Alex Turner</span>
+            <span class="tweet-handle">@alexturner</span>
+            <span>·</span>
+            <span class="tweet-time">1d</span>
+          </div>
+          <div class="tweet-text">
+            Finally watched that movie everyone's been talking about. Without spoilers: it's a masterpiece. Go see it if you haven't! 🎬🍿
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>89</span></div>
+            <div class="tweet-action">🔁 <span>45</span></div>
+            <div class="tweet-action">❤️ <span>567</span></div>
+            <div class="tweet-action">📊 <span>23.4K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=31');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Fitness Coach Mike</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@coachmikefit</span>
+            <span>·</span>
+            <span class="tweet-time">1d</span>
+          </div>
+          <div class="tweet-text">
+            💪 Monday Motivation 💪
+            
+            Your only limit is YOU. Stop making excuses and start making progress.
+            
+            Drop your fitness goals below! 👇
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>456</span></div>
+            <div class="tweet-action">🔁 <span>1.2K</span></div>
+            <div class="tweet-action">❤️ <span>5.6K</span></div>
+            <div class="tweet-action">📊 <span>234K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=25');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Rachel Green</span>
+            <span class="tweet-handle">@rachelgreen</span>
+            <span>·</span>
+            <span class="tweet-time">1d</span>
+          </div>
+          <div class="tweet-text">
+            Made homemade pasta from scratch for the first time! 🍝👩‍🍳 
+            
+            It took 3 hours but totally worth it. Who knew cooking could be this therapeutic?
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>78</span></div>
+            <div class="tweet-action">🔁 <span>34</span></div>
+            <div class="tweet-action">❤️ <span>892</span></div>
+            <div class="tweet-action">📊 <span>34.5K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=70');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Space Exploration</span>
+            <span class="tweet-verified">✓</span>
+            <span class="tweet-handle">@spaceexplore</span>
+            <span>·</span>
+            <span class="tweet-time">1d</span>
+          </div>
+          <div class="tweet-text">
+            🌌 INCREDIBLE: James Webb Telescope captures most detailed image of distant galaxy ever recorded
+            
+            The galaxy is 13.4 billion light years away, showing us the universe as it was just 400M years after the Big Bang
+            
+            Science is amazing! 🔭✨
+          </div>
+          <img src="https://picsum.photos/600/400?random=4" style="width: 100%; border-radius: 16px; margin: 12px 0; display: block; object-fit: cover;" alt="Space galaxy">
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>4.5K</span></div>
+            <div class="tweet-action">🔁 <span>23.7K</span></div>
+            <div class="tweet-action">❤️ <span>89.2K</span></div>
+            <div class="tweet-action">📊 <span>3.4M</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tweet">
+        <div class="tweet-avatar" style="background-image: url('https://i.pravatar.cc/150?img=56');"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">Tom Anderson</span>
+            <span class="tweet-handle">@tomanderson</span>
+            <span>·</span>
+            <span class="tweet-time">2d</span>
+          </div>
+          <div class="tweet-text">
+            Reminder: It's okay to take a break. It's okay to rest. It's okay to not be productive 24/7.
+            
+            Your worth isn't measured by your productivity. 💙
+          </div>
+          <div class="tweet-actions">
+            <div class="tweet-action">💬 <span>567</span></div>
+            <div class="tweet-action">🔁 <span>3.4K</span></div>
+            <div class="tweet-action">❤️ <span>18.9K</span></div>
+            <div class="tweet-action">📊 <span>456K</span></div>
+            <div class="tweet-action">🔖</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Right Sidebar -->
+    <aside class="right-sidebar">
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="Search" />
+      </div>
+      
+      <div class="trending-card">
+        <div class="trending-header">What's happening</div>
+        
+        <div class="trending-item">
+          <div class="trending-category">Technology · Trending</div>
+          <div class="trending-title">#AI</div>
+          <div class="trending-count">245K posts</div>
+        </div>
+        
+        <div class="trending-item">
+          <div class="trending-category">Business · Trending</div>
+          <div class="trending-title">#Bitcoin</div>
+          <div class="trending-count">187K posts</div>
+        </div>
+        
+        <div class="trending-item">
+          <div class="trending-category">Entertainment · Trending</div>
+          <div class="trending-title">New Movie Release</div>
+          <div class="trending-count">92.5K posts</div>
+        </div>
+        
+        <div class="trending-item">
+          <div class="trending-category">Sports · Live</div>
+          <div class="trending-title">NBA Finals</div>
+          <div class="trending-count">156K posts</div>
+        </div>
+        
+        <div class="trending-item">
+          <div class="trending-category">Politics · Trending</div>
+          <div class="trending-title">#Election2024</div>
+          <div class="trending-count">312K posts</div>
+        </div>
+      </div>
+      
+      <div class="trending-card" style="margin-top: 16px;">
+        <div class="trending-header">Who to follow</div>
+        
+        <div class="trending-item" style="display: flex; align-items: center; gap: 12px;">
+          <div class="tweet-avatar" style="width: 48px; height: 48px; background-image: url('https://i.pravatar.cc/150?img=64');"></div>
+          <div style="flex: 1;">
+            <div class="tweet-name">John Doe</div>
+            <div class="tweet-handle">@johndoe</div>
+          </div>
+          <button class="compose-btn" style="padding: 6px 16px; font-size: 0.9rem;">Follow</button>
+        </div>
+        
+        <div class="trending-item" style="display: flex; align-items: center; gap: 12px;">
+          <div class="tweet-avatar" style="width: 48px; height: 48px; background-image: url('https://i.pravatar.cc/150?img=47');"></div>
+          <div style="flex: 1;">
+            <div class="tweet-name">Alice Lee</div>
+            <div class="tweet-handle">@alicelee</div>
+          </div>
+          <button class="compose-btn" style="padding: 6px 16px; font-size: 0.9rem;">Follow</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

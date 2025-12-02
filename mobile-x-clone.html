@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email - Inbox</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📧</text></svg>" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #1a1a1a;
+      overflow-x: hidden;
+    }
+    
+    .app {
+      max-width: 100%;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      color: #1a1a1a;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    
+    .menu-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    }
+    
+    .menu-btn:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+      transform: scale(1.05);
+    }
+    
+    .menu-btn span {
+      display: block;
+      width: 22px;
+      height: 2.5px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    
+    .logo-text {
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .search-container {
+      flex: 1;
+      max-width: 600px;
+      position: relative;
+    }
+    
+    .search-bar {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 16px;
+      padding: 14px 20px 14px 52px;
+      border: 2px solid transparent;
+      color: #1a1a1a;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+    }
+    
+    .search-bar:focus {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: #667eea;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #667eea;
+      font-size: 1.3rem;
+      pointer-events: none;
+    }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .header-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1.3rem;
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.08);
+    }
+    
+    .header-btn:hover {
+      background: rgba(102, 126, 234, 0.15);
+      transform: scale(1.05);
+    }
+    
+    .profile-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .profile-icon:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    
+    .sidebar {
+      width: 280px;
+      padding: 20px 12px;
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+      overflow-y: auto;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.5);
+    }
+    
+    .compose-btn {
+      margin: 0 8px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 16px;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .compose-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(102, 126, 234, 0.45);
+    }
+    
+    .compose-btn:active {
+      transform: translateY(-1px);
+    }
+    
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 20px;
+      margin: 4px 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 0.9rem;
+      color: #444;
+      font-weight: 500;
+    }
+    
+    .nav-item:hover {
+      background: rgba(102, 126, 234, 0.1);
+      transform: translateX(4px);
+    }
+    
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+      color: #667eea;
+      font-weight: 600;
+    }
+    
+    .nav-item .icon {
+      width: 24px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+    
+    .nav-item .count {
+      margin-left: auto;
+      font-weight: 600;
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+    }
+    
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .toolbar {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      min-height: 64px;
+    }
+    
+    .checkbox-all {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #667eea;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .checkbox-all:hover {
+      background: rgba(102, 126, 234, 0.1);
+      transform: scale(1.1);
+    }
+    
+    .toolbar-divider {
+      width: 2px;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.1);
+      margin: 0 8px;
+      border-radius: 2px;
+    }
+    
+    .toolbar-btn {
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #667eea;
+      font-size: 1.2rem;
+      background: rgba(102, 126, 234, 0.08);
+    }
+    
+    .toolbar-btn:hover {
+      background: rgba(102, 126, 234, 0.15);
+      transform: scale(1.08);
+    }
+    
+    .toolbar-btn.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .pagination {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #667eea;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .tabs {
+      display: flex;
+      padding: 0 24px;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    
+    .tab {
+      padding: 18px 28px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .tab:hover {
+      background: rgba(102, 126, 234, 0.08);
+      color: #667eea;
+    }
+    
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+    
+    .tab-icon {
+      font-size: 1.1rem;
+    }
+    
+    .email-list {
+      flex: 1;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+    
+    .email {
+      display: flex;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      gap: 18px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    
+    .email::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: transparent;
+      transition: all 0.3s;
+    }
+    
+    .email:hover {
+      background: linear-gradient(90deg, rgba(102, 126, 234, 0.03), rgba(255, 255, 255, 0));
+      transform: translateX(4px);
+    }
+    
+    .email:hover::before {
+      background: linear-gradient(180deg, #667eea, #764ba2);
+    }
+    
+    .email.unread {
+      background: linear-gradient(90deg, rgba(102, 126, 234, 0.05), rgba(255, 255, 255, 0));
+    }
+    
+    .email-checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #667eea;
+      border-radius: 6px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.3s;
+    }
+    
+    .email:hover .email-checkbox {
+      background: rgba(102, 126, 234, 0.1);
+    }
+    
+    .email-star {
+      font-size: 1.4rem;
+      color: #ddd;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: -2px;
+      transition: all 0.3s;
+      filter: grayscale(0.5);
+    }
+    
+    .email-star:hover {
+      color: #fbbc04;
+      filter: grayscale(0);
+      transform: scale(1.2);
+    }
+    
+    .email-star.starred {
+      color: #fbbc04;
+      filter: grayscale(0);
+    }
+    
+    .email-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+    }
+    
+    .email-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .email-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .email-sender {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #1a1a1a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
+    }
+    
+    .email.unread .email-sender {
+      font-weight: 700;
+    }
+    
+    .email-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .email-time {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: #999;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+    
+    .email-subject-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .email-subject {
+      font-size: 0.95rem;
+      color: #1a1a1a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+    
+    .email.unread .email-subject {
+      font-weight: 700;
+    }
+    
+    .email-attachment {
+      font-size: 1rem;
+      color: #667eea;
+      flex-shrink: 0;
+    }
+    
+    .email-preview {
+      font-size: 0.85rem;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.5;
+    }
+    
+    .email-labels {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    
+    .email-label {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    
+    .fab {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 99;
+    }
+    
+    .fab:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+    }
+    
+    .fab:active {
+      transform: scale(0.95);
+    }
+    
+    .trigger-btn {
+      display: none !important;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 100px;
+      right: 32px;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85));
+      backdrop-filter: blur(20px);
+      color: #ffffff;
+      padding: 20px 24px;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 101;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 350px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .notification-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    
+    .notification-content {
+      flex: 1;
+    }
+    
+    .notification-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+    
+    .notification-text {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    @keyframes slideOutUp {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+      }
+    }
+    
+    .email.new-email {
+      animation: slideInDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .email.removing {
+      animation: slideOutUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      
+      .search-container {
+        max-width: none;
+      }
+      
+      .logo-text {
+        display: none;
+      }
+      
+      .header-btn.hide-mobile {
+        display: none;
+      }
+    }
+    
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    .loading-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(102, 126, 234, 0.2);
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(102, 126, 234, 0.3);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(102, 126, 234, 0.5);
+    }
+    
+    /* Email detail modal styles */
+    .email-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 20px;
+    }
+    
+    .email-modal.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .email-modal-content {
+      background: #ffffff;
+      border-radius: 24px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9) translateY(30px);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .email-modal.show .email-modal-content {
+      transform: scale(1) translateY(0);
+    }
+    
+    .email-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+    }
+    
+    .email-modal-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.05);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: all 0.3s;
+      color: #666;
+    }
+    
+    .email-modal-close:hover {
+      background: rgba(255, 65, 108, 0.1);
+      color: #ff416c;
+      transform: scale(1.1);
+    }
+    
+    .email-modal-body {
+      padding: 32px 28px;
+    }
+    
+    .email-detail-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .email-detail-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+    
+    .email-detail-info {
+      flex: 1;
+    }
+    
+    .email-detail-sender {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #1a1a1a;
+    }
+    
+    .email-detail-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #666;
+      flex-wrap: wrap;
+    }
+    
+    .email-detail-subject {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+    
+    .email-detail-labels {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    
+    .email-detail-label {
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .email-detail-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #333;
+      white-space: pre-wrap;
+    }
+    
+    .email-detail-attachment {
+      margin-top: 24px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+      border-radius: 12px;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .email-detail-attachment-icon {
+      font-size: 2rem;
+    }
+    
+    .email-detail-attachment-info {
+      flex: 1;
+    }
+    
+    .email-detail-attachment-name {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .email-detail-attachment-size {
+      font-size: 0.85rem;
+      color: #666;
+    }
+    
+    .email-detail-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .email-detail-action-btn {
+      flex: 1;
+      padding: 14px 24px;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .email-detail-action-btn.primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+    }
+    
+    .email-detail-action-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .email-detail-action-btn.secondary {
+      background: rgba(0, 0, 0, 0.05);
+      color: #666;
+    }
+    
+    .email-detail-action-btn.secondary:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .email-modal {
+        padding: 0;
+        align-items: flex-end;
+      }
+      
+      .email-modal-content {
+        max-height: 95vh;
+        border-radius: 24px 24px 0 0;
+      }
+      
+      .email-detail-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="menu-btn" id="secretBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <div class="logo">
+        <span>📧</span>
+        <span class="logo-text">Email</span>
+      </div>
+      
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-bar" placeholder="Search mail" />
+      </div>
+      
+      <div class="header-actions">
+        <div class="header-btn hide-mobile" title="Help">❓</div>
+        <div class="header-btn hide-mobile" title="Settings">⚙️</div>
+        <div class="header-btn" title="Apps">◉</div>
+        <div class="profile-icon">M</div>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+      <aside class="sidebar">
+        <button class="compose-btn">
+          <span style="font-size: 1.3rem;">✏️</span>
+          <span>Compose</span>
+        </button>
+        
+        <nav>
+          <div class="nav-item active">
+            <span class="icon">📥</span>
+            <span>Inbox</span>
+            <span class="count" id="inboxCount">7</span>
+          </div>
+          <div class="nav-item">
+            <span class="icon">⭐</span>
+            <span>Starred</span>
+          </div>
+          <div class="nav-item">
+            <span class="icon">⏰</span>
+            <span>Snoozed</span>
+          </div>
+          <div class="nav-item">
+            <span class="icon">📤</span>
+            <span>Sent</span>
+          </div>
+          <div class="nav-item">
+            <span class="icon">📝</span>
+            <span>Drafts</span>
+            <span class="count">2</span>
+          </div>
+          <div class="nav-item">
+            <span class="icon">🗑️</span>
+            <span>Trash</span>
+          </div>
+          <div class="nav-item">
+            <span class="icon">⚠️</span>
+            <span>Spam</span>
+          </div>
+        </nav>
+      </aside>
+
+      <main>
+        <div class="toolbar">
+          <div class="checkbox-all"></div>
+          <div class="toolbar-divider"></div>
+          <div class="toolbar-btn" title="Refresh">🔄</div>
+          <div class="toolbar-btn disabled" title="Archive">📦</div>
+          <div class="toolbar-btn disabled" title="Report spam">⚠️</div>
+          <div class="toolbar-btn disabled" title="Delete">🗑️</div>
+          <div class="toolbar-divider"></div>
+          <div class="toolbar-btn disabled" title="Mark as read">✉️</div>
+          <div class="toolbar-btn disabled" title="Snooze">⏰</div>
+          
+          <div class="pagination">
+            <span id="paginationText">1-7 of 7</span>
+            <div class="toolbar-btn">◀️</div>
+            <div class="toolbar-btn">▶️</div>
+          </div>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab active">
+            <span class="tab-icon">📥</span>
+            <span>Primary</span>
+          </div>
+          <div class="tab">
+            <span class="tab-icon">👥</span>
+            <span>Social</span>
+          </div>
+          <div class="tab">
+            <span class="tab-icon">🏷️</span>
+            <span>Promotions</span>
+          </div>
+        </div>
+
+        <div class="email-list" id="emailList">
+          <!-- Fake email 1 -->
+          <div class="email unread">
+            <div class="email-checkbox"></div>
+            <div class="email-star">☆</div>
+            <div class="email-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">JA</div>
+            <div class="email-content">
+              <div class="email-header">
+                <span class="email-sender">John Anderson</span>
+                <span class="email-badge">Important</span>
+                <span class="email-time">10:23 AM</span>
+              </div>
+              <div class="email-subject-line">
+                <span class="email-subject">Q4 Budget Review Meeting - Action Required</span>
+              </div>
+              <div class="email-preview">Hi team, I've scheduled a meeting for Thursday at 2 PM to discuss the Q4 budget allocations. Please review the attached spreadsheet before the meeting...</div>
+              <div class="email-labels">
+                <span class="email-label">Work</span>
+                <span class="email-label">Finance</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fake email 2 -->
+          <div class="email unread">
+            <div class="email-checkbox"></div>
+            <div class="email-star">☆</div>
+            <div class="email-avatar" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">SC</div>
+            <div class="email-content">
+              <div class="email-header">
+                <span class="email-sender">Sarah Chen (Amazon)</span>
+                <span class="email-time">9:45 AM</span>
+              </div>
+              <div class="email-subject-line">
+                <span class="email-subject">Your package has been delivered! 📦</span>
+              </div>
+              <div class="email-preview">Good news! Your order #8472-349812 was successfully delivered today at 9:30 AM. Hope you enjoy your new purchase. Rate your delivery experience...</div>
+              <div class="email-labels">
+                <span class="email-label">Shopping</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fake email 3 -->
+          <div class="email">
+            <div class="email-checkbox"></div>
+            <div class="email-star starred">★</div>
+            <div class="email-avatar" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">N</div>
+            <div class="email-content">
+              <div class="email-header">
+                <span class="email-sender">Netflix</span>
+                <span class="email-time">Yesterday</span>
+              </div>
+              <div class="email-subject-line">
+                <span class="email-subject">New releases this week you might enjoy</span>
+              </div>
+              <div class="email-preview">Check out these new shows and movies added this week: The Crown Season 6, Avatar: The Last Airbender live-action, and more exclusive content...</div>
+              <div class="email-labels">
+                <span class="email-label">Entertainment</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fake email 4 -->
+          <div class="email">
+            <div class="email-checkbox"></div>
+            <div class="email-star">☆</div>
+            <div class="email-avatar" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">MR</div>
+            <div class="email-content">
+              <div class="email-header">
+                <span class="email-sender">Mike Rodriguez</span>
+                <span class="email-time">Yesterday</span>
+              </div>
+              <div class="email-subject-line">
+                <span class="email-subject">Re: Project timeline update</span>
+                <span class="email-attachment">📎</span>
+              </div>
+              <div class="email-preview">Thanks for the update. I've reviewed the timeline and have a few suggestions. I've attached a revised Gantt chart with proposed changes. Can we schedule a quick call?...</div>
+              <div class="email-labels">
+                <span class="email-label">Work</span>
+                <span class="email-label">Projects</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fake email 5 -->
+          <div class="email">
+            <div class="email-checkbox"></div>
+            <div class="email-star">☆</div>
+            <div class="email-avatar" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">A</div>
+            <div class="email-content">
+              <div class="email-header">
+                <span class="email-sender">Amazon Logistics</span>
+                <span class="email-time">2 days ago</span>
+              </div>
+              <div class="email-subject-line">
+                <span class="email-subject">Your order is on the way - Arriving Dec 28</span>
+              </div>
+              <div class="email-preview">Track your package: Order #8471-238471 is out for delivery. Expected arrival: December 28, 2024. Track it live on our app or website using the link below...</div>
+              <div class="email-labels">
+                <span class="email-label">Shopping</span>
+                <span class="email-label">Tracking</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fake email 6 -->
+          <div class="email">
+            <div class="email-checkbox"></div>
+            <div class="email-star starred">★</div>
+            <div class="email-avatar" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">LT</div>
+            <div class="email-content">
+              <div class="email-header">
+                <span class="email-sender">Lisa Thompson</span>
+                <span class="email-time">3 days ago</span>
+              </div>
+              <div class="email-subject-line">
+                <span class="email-subject">Holiday party planning - Let's finalize details! 🎉</span>
+              </div>
+              <div class="email-preview">Hey everyone! Let's finalize the details for our holiday gathering. I've created a poll for dates and venue preferences. Please vote by Friday so we can book...</div>
+              <div class="email-labels">
+                <span class="email-label">Personal</span>
+                <span class="email-label">Events</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fake email 7 -->
+          <div class="email">
+            <div class="email-checkbox"></div>
+            <div class="email-star">☆</div>
+            <div class="email-avatar" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">GH</div>
+            <div class="email-content">
+              <div class="email-header">
+                <span class="email-sender">GitHub Security</span>
+                <span class="email-badge">Security</span>
+                <span class="email-time">4 days ago</span>
+              </div>
+              <div class="email-subject-line">
+                <span class="email-subject">[Security] Dependabot alert: Critical vulnerability detected</span>
+              </div>
+              <div class="email-preview">A critical security vulnerability was detected in one of your repositories. Affected package: lodash@4.17.15. Please update to version 4.17.21 or higher immediately...</div>
+              <div class="email-labels">
+                <span class="email-label">Development</span>
+                <span class="email-label">Security</span>
+                <span class="email-label">Urgent</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="fab">✏️</div>
+    
+    <div class="notification" id="notification">
+      <span class="notification-icon">📬</span>
+      <div class="notification-content">
+        <div class="notification-title" id="notificationTitle">New Email Received</div>
+        <div class="notification-text" id="notificationText">URGENT ALERT from System</div>
+      </div>
+    </div>
+    
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Add email detail modal before closing body tag -->
+  <div class="email-modal" id="emailModal">
+    <div class="email-modal-content">
+      <div class="email-modal-header">
+        <h2>Email Details</h2>
+        <button class="email-modal-close" id="closeModal">✕</button>
+      </div>
+      <div class="email-modal-body">
+        <div class="email-detail-header">
+          <div class="email-detail-avatar" id="modalAvatar"></div>
+          <div class="email-detail-info">
+            <div class="email-detail-sender" id="modalSender"></div>
+            <div class="email-detail-meta">
+              <span id="modalTime"></span>
+              <span id="modalBadge"></span>
+            </div>
+          </div>
+        </div>
+        
+        <h1 class="email-detail-subject" id="modalSubject"></h1>
+        
+        <div class="email-detail-labels" id="modalLabels"></div>
+        
+        <div class="email-detail-body" id="modalBody"></div>
+        
+        <div class="email-detail-attachment" id="modalAttachment" style="display: none;">
+          <div class="email-detail-attachment-icon">📎</div>
+          <div class="email-detail-attachment-info">
+            <div class="email-detail-attachment-name">classified_data.encrypted</div>
+            <div class="email-detail-attachment-size">2.4 MB • Encrypted file</div>
+          </div>
+        </div>
+        
+        <div class="email-detail-actions">
+          <button class="email-detail-action-btn primary">
+            <span>↩️</span>
+            <span>Reply</span>
+          </button>
+          <button class="email-detail-action-btn secondary">
+            <span>↪️</span>
+            <span>Forward</span>
+          </button>
+          <button class="email-detail-action-btn secondary" id="deleteFromModal">
+            <span>🗑️</span>
+            <span>Delete</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // filepath: c:\Users\frant\OneDrive\Desktop\cyber\mobile-x-clone.html
+    // ========================================
+    // EASY EDIT: Configure the urgent email content here
+    // ========================================
+    const URGENT_EMAIL_CONFIG = {
+      avatar: '🚨',
+      avatarGradient: 'linear-gradient(135deg, #cc0000 0%, #8b0000 100%)',
+      sender: 'CNN Disaster Relief < cnn@cnnn.com>', // <- more fake/scammy
+      badgeText: 'URGENT',
+      badgeGradient: 'linear-gradient(135deg, #cc0000, #8b0000)',
+      time: 'Just now',
+      subject: '⚠️ URGENT: Help Flood Victims in Central Europe - Donate Now',
+      hasAttachment: false,
+      preview: 'BREAKING: Catastrophic floods devastate Central Europe. Thousands displaced. CNN has launched an emergency relief fund. Your donation can save lives. Click here to help now...',
+      fullBody: `⚠️ URGENT FLOOD DISASTER APPEAL ⚠️
+    
+Dear Supporter,
+
+BREAKING NEWS: Catastrophic flooding has devastated Central Europe, leaving tens of thousands of families homeless and in desperate need of help.
+
+👉 <a href="cnn-fake-article.html" style="color: #cc0000; font-weight: bold; text-decoration: underline; font-size: 1.1rem;">READ MORE & DONATE NOW</a>
+
+CURRENT SITUATION:
+• Entire communities submerged
+• Critical infrastructure destroyed
+• Emergency services overwhelmed
+• Thousands stranded without food or water
+
+CNN has launched an EMERGENCY RELIEF FUND to provide:
+✓ Food and clean water
+✓ Emergency shelter
+✓ Medical supplies
+✓ Rescue operations
+
+⚡ DONATE NOW - EVERY SECOND COUNTS ⚡
+
+Click the link below to watch our exclusive coverage and donate:
+👉 <a href="cnn-fake-article.html" style="color: #cc0000; text-decoration: underline;">cnn-fake-article.html</a>
+
+Your donation will be immediately deployed to:
+• Rescue trapped families
+• Provide emergency medical care
+• Deliver food and water to evacuation centers
+• Rebuild destroyed homes
+
+TIME IS RUNNING OUT - People are dying while waiting for help!
+
+CNN will MATCH all donations made in the next 24 hours!
+$10 becomes $20
+$50 becomes $100
+$100 becomes $200
+
+DONATE SECURELY NOW:
+Visit: <a href="cnn-fake-article.html" style="color: #cc0000; text-decoration: underline;">cnn-fake-article.html</a>
+See the devastation with your own eyes and help save lives.
+
+Together we can make a difference. Don't wait - every minute matters!
+
+---
+CNN Disaster Relief
+news-alerts@cnnn-emergency-aid.com
+© 2024 Cable News Network
+
+This is an official CNN disaster relief campaign.
+Tax-deductible receipts provided for all donations.`,
+      labels: [
+        { text: 'News', bgColor: 'rgba(204, 0, 0, 0.1)', textColor: '#cc0000' },
+        { text: 'Breaking', bgColor: 'rgba(255, 152, 0, 0.1)', textColor: '#ff9800' }
+      ],
+      notificationTitle: '🚨 CNN Emergency Appeal',
+      removeNotificationTitle: '✅ Alert cleared - Press any key to see it again'
+    };
+    // ========================================
+    
+    const secretBtn = document.getElementById('secretBtn');
+    const emailList = document.getElementById('emailList');
+    const notification = document.getElementById('notification');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const inboxCount = document.getElementById('inboxCount');
+    const paginationText = document.getElementById('paginationText');
+    const emailModal = document.getElementById('emailModal');
+    const closeModal = document.getElementById('closeModal');
+    const deleteFromModal = document.getElementById('deleteFromModal');
+    
+    let clickCount = 0;
+    let resetTimer;
+    let urgentEmailPresent = false;
+    let urgentEmailElement = null;
+    let isRemoving = false;
+
+    // Secret button functionality (triple click)
+    secretBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clickCount++;
+      clearTimeout(resetTimer);
+      
+      secretBtn.style.transform = 'scale(0.9)';
+      setTimeout(() => secretBtn.style.transform = '', 100);
+      
+      if (clickCount === 3) {
+        loadingOverlay.classList.add('show');
+        
+        setTimeout(() => {
+          loadingOverlay.classList.remove('show');
+          addSecretEmail();
+        }, 800);
+        
+        clickCount = 0;
+      }
+      
+      resetTimer = setTimeout(() => clickCount = 0, 2000);
+    });
+
+    // Keyboard listener for removing/re-adding email (ONLY WAY TO TRIGGER)
+    document.addEventListener('keydown', (e) => {
+      // Ignore if typing in search bar
+      if (e.target.classList.contains('search-bar')) return;
+      
+      // Prevent rapid toggling during animation
+      if (isRemoving) return;
+      
+      if (e.key === 'Escape' && emailModal.classList.contains('show')) {
+        closeEmailModal();
+        return;
+      }
+      
+      // Don't toggle when modal is open
+      if (emailModal.classList.contains('show')) return;
+      
+      if (urgentEmailPresent) {
+        removeUrgentEmail(true);
+      } else {
+        addUrgentEmail();
+      }
+    });
+
+    function addUrgentEmail() {
+      if (urgentEmailPresent || isRemoving) return;
+      
+      urgentEmailPresent = true;
+      
+      const config = URGENT_EMAIL_CONFIG;
+      const labelsHtml = config.labels.map(label => 
+        `<span class="email-label" style="background: ${label.bgColor}; color: ${label.textColor};">${label.text}</span>`
+      ).join('');
+      
+      const urgentEmail = document.createElement('div');
+      urgentEmail.className = 'email unread new-email';
+      urgentEmail.id = 'urgentEmail';
+      urgentEmail.innerHTML = `
+        <div class="email-checkbox"></div>
+        <div class="email-star">☆</div>
+        <div class="email-avatar" style="background: ${config.avatarGradient};">${config.avatar}</div>
+        <div class="email-content">
+          <div class="email-header">
+            <span class="email-sender">${config.sender}</span>
+            <span class="email-badge" style="background: ${config.badgeGradient};">${config.badgeText}</span>
+            <span class="email-time">${config.time}</span>
+          </div>
+          <div class="email-subject-line">
+            <span class="email-subject">${config.subject}</span>
+            ${config.hasAttachment ? '<span class="email-attachment">📎</span>' : ''}
+          </div>
+          <div class="email-preview">${config.preview}</div>
+          <div class="email-labels">
+            ${labelsHtml}
+          </div>
+        </div>
+      `;
+      emailList.insertBefore(urgentEmail, emailList.firstChild);
+      urgentEmailElement = urgentEmail;
+      
+      // Add click handler to open modal
+      urgentEmail.addEventListener('click', (e) => {
+        if (e.target.classList.contains('email-star') || 
+            e.target.classList.contains('email-checkbox')) {
+          return;
+        }
+        openEmailModal();
+      });
+      
+      updateCounts(1);
+      showNotification('New Email Received', config.notificationTitle);
+    }
+
+    function openEmailModal() {
+      const config = URGENT_EMAIL_CONFIG;
+
+      document.getElementById('modalAvatar').style.background = config.avatarGradient;
+      document.getElementById('modalAvatar').textContent = config.avatar;
+      document.getElementById('modalSender').textContent = config.sender;
+      document.getElementById('modalTime').textContent = config.time;
+
+      const badgeHtml = `<span class="email-badge" style="background: ${config.badgeGradient};">${config.badgeText}</span>`;
+      document.getElementById('modalBadge').innerHTML = badgeHtml;
+
+      document.getElementById('modalSubject').textContent = config.subject;
+      // IMPORTANT: use innerHTML so links render, not textContent
+      document.getElementById('modalBody').innerHTML = config.fullBody;
+
+      const labelsHtml = config.labels.map(label =>
+        `<span class="email-detail-label" style="background: ${label.bgColor}; color: ${label.textColor};">${label.text}</span>`
+      ).join('');
+      document.getElementById('modalLabels').innerHTML = labelsHtml;
+
+      document.getElementById('modalAttachment').style.display = config.hasAttachment ? 'flex' : 'none';
+
+      emailModal.classList.add('show');
+      if (urgentEmailElement) urgentEmailElement.classList.remove('unread');
+    }
+
+    function closeEmailModal() {
+      emailModal.classList.remove('show');
+    }
+
+    closeModal.addEventListener('click', closeEmailModal);
+    
+    emailModal.addEventListener('click', (e) => {
+      if (e.target === emailModal) {
+        closeEmailModal();
+      }
+    });
+    
+    deleteFromModal.addEventListener('click', () => {
+      closeEmailModal();
+      removeUrgentEmail();
+    });
+
+    function removeUrgentEmail(fromKeyboard = false) {
+      if (!urgentEmailPresent || !urgentEmailElement || isRemoving) return;
+      
+      isRemoving = true;
+      urgentEmailPresent = false;
+      urgentEmailElement.classList.add('removing');
+      
+      setTimeout(() => {
+        if (urgentEmailElement && urgentEmailElement.parentNode) {
+          urgentEmailElement.remove();
+        }
+        urgentEmailElement = null;
+        updateCounts(-1);
+        isRemoving = false;
+        
+        if (fromKeyboard) {
+          showNotification('Email Cleared', URGENT_EMAIL_CONFIG.removeNotificationTitle);
+        } else {
+          showNotification('Email Removed', '🗑️ Urgent email has been cleared');
+        }
+      }, 500);
+    }
+
+    function addSecretEmail() {
+      const secretEmail = document.createElement('div');
+      secretEmail.className = 'email unread new-email';
+      secretEmail.innerHTML = `
+        <div class="email-checkbox"></div>
+        <div class="email-star">☆</div>
+        <div class="email-avatar" style="background: linear-gradient(135deg, #000000 0%, #434343 100%);">🔒</div>
+        <div class="email-content">
+          <div class="email-header">
+            <span class="email-sender">CONFIDENTIAL SOURCE</span>
+            <span class="email-badge" style="background: linear-gradient(135deg, #000, #333);">TOP SECRET</span>
+            <span class="email-time">Just now</span>
+          </div>
+          <div class="email-subject-line">
+            <span class="email-subject">🔐 Classified Information - Clearance Level 5 Required</span>
+            <span class="email-attachment">📎</span>
+          </div>
+          <div class="email-preview">You have successfully unlocked this hidden message. The secret trigger mechanism has been activated. This confidential email contains sensitive information about Project Nightfall...</div>
+          <div class="email-labels">
+            <span class="email-label" style="background: rgba(0, 0, 0, 0.8); color: #fff;">Classified</span>
+            <span class="email-label" style="background: rgba(217, 48, 37, 0.8); color: #fff;">Urgent</span>
+            <span class="email-label" style="background: rgba(251, 188, 4, 0.8); color: #000;">Encrypted</span>
+          </div>
+        </div>
+      `;
+      emailList.insertBefore(secretEmail, emailList.firstChild);
+      updateCounts(1);
+      showNotification('Secret Unlocked!', '🔓 Hidden message received');
+    }
+
+    function updateCounts(delta) {
+      const current = parseInt(inboxCount.textContent);
+      const newCount = current + delta;
+      inboxCount.textContent = newCount;
+      paginationText.textContent = `1-${newCount} of ${newCount}`;
+    }
+
+    function showNotification(title, text) {
+      document.getElementById('notificationTitle').textContent = title;
+      document.getElementById('notificationText').textContent = text;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Star toggle functionality
+    emailList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('email-star')) {
+        e.stopPropagation();
+        const isStarred = e.target.classList.toggle('starred');
+        e.target.textContent = isStarred ? '★' : '☆';
+      }
+    });
+
+    // Checkbox toggle
+    emailList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('email-checkbox')) {
+        e.stopPropagation();
+        if (e.target.style.background) {
+          e.target.style.background = '';
+          e.target.style.borderColor = '';
+        } else {
+          e.target.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+          e.target.style.borderColor = '#667eea';
+        }
+      }
+    });
+
+    // Email click handler
+    emailList.addEventListener('click', (e) => {
+      const email = e.target.closest('.email');
+      if (email && !e.target.classList.contains('email-star') && !e.target.classList.contains('email-checkbox')) {
+        email.classList.remove('unread');
+      }
+    });
+  </script>
+</body>
+</html>

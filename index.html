@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>X</title>
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>𝕏</text></svg>" />
+	<style>
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+    
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+			background: #000000;
+			color: #e7e9ea;
+			line-height: 1.5;
+		}
+    
+		.container {
+			display: flex;
+			min-height: 100vh;
+			max-width: 1280px;
+			margin: 0 auto;
+		}
+    
+		/* Sidebar */
+		.sidebar {
+			width: 275px;
+			padding: 0 12px;
+			display: flex;
+			flex-direction: column;
+			position: sticky;
+			top: 0;
+			height: 100vh;
+			border-right: 1px solid #2f3336;
+		}
+    
+		.logo {
+			width: 50px;
+			height: 50px;
+			margin: 4px 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.8rem;
+			cursor: pointer;
+			border-radius: 50%;
+			transition: background 0.2s;
+		}
+    
+		.logo:hover {
+			background: rgba(231, 233, 234, 0.1);
+		}
+    
+		.nav-items {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			margin-top: 4px;
+		}
+    
+		.nav-item {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+			padding: 12px 16px;
+			font-size: 1.25rem;
+			font-weight: 400;
+			border-radius: 24px;
+			cursor: pointer;
+			transition: background 0.2s;
+			text-decoration: none;
+			color: #e7e9ea;
+		}
+    
+		.nav-item:hover {
+			background: rgba(231, 233, 234, 0.1);
+		}
+    
+		.nav-item.active {
+			font-weight: 700;
+		}
+    
+		.nav-icon {
+			font-size: 1.6rem;
+			width: 26px;
+			text-align: center;
+		}
+    
+		.post-btn {
+			margin-top: 16px;
+			background: #1d9bf0;
+			color: #ffffff;
+			border: none;
+			border-radius: 24px;
+			padding: 16px;
+			font-size: 1.1rem;
+			font-weight: 700;
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+    
+		.post-btn:hover {
+			background: #1a8cd8;
+		}
+    
+		.user-menu {
+			margin-top: auto;
+			margin-bottom: 12px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px;
+			border-radius: 24px;
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+    
+		.user-menu:hover {
+			background: rgba(231, 233, 234, 0.1);
+		}
+    
+		.user-avatar {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #1d9bf0 0%, #0088cc 100%);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 700;
+			font-size: 1rem;
+			background-size: cover;
+			background-position: center;
+		}
+    
+		.user-info {
+			flex: 1;
+		}
+    
+		.user-name {
+			font-weight: 700;
+			font-size: 0.95rem;
+		}
+    
+		.user-handle {
+			color: #71767b;
+			font-size: 0.95rem;
+		}
+    
+		/* Main Feed */
+		.main-feed {
+			flex: 1;
+			max-width: 600px;
+			border-right: 1px solid #2f3336;
+		}
+    
+		.feed-header {
+			padding: 16px;
+			border-bottom: 1px solid #2f3336;
+			position: sticky;
+			top: 0;
+			background: rgba(0, 0, 0, 0.85);
+			backdrop-filter: blur(12px);
+			z-index: 10;
+		}
+    
+		.feed-title {
+			font-size: 1.25rem;
+			font-weight: 700;
+		}
+    
+		.feed-tabs {
+			display: flex;
+			border-bottom: 1px solid #2f3336;
+		}
+    
+		.feed-tab {
+			flex: 1;
+			padding: 16px;
+			text-align: center;
+			font-weight: 500;
+			cursor: pointer;
+			transition: background 0.2s;
+			position: relative;
+		}
+    
+		.feed-tab:hover {
+			background: rgba(231, 233, 234, 0.1);
+		}
+    
+		.feed-tab.active {
+			font-weight: 700;
+		}
+    
+		.feed-tab.active::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 60px;
+			height: 4px;
+			background: #1d9bf0;
+			border-radius: 4px 4px 0 0;
+		}
+    
+		.compose-tweet {
+			padding: 16px;
+			border-bottom: 1px solid #2f3336;
+			display: flex;
+			gap: 12px;
+		}
+    
+		.compose-input {
+			flex: 1;
+			background: transparent;
+			border: none;
+			color: #e7e9ea;
+			font-size: 1.25rem;
+			outline: none;
+			font-family: inherit;
+			resize: none;
+		}
+    
+		.compose-input::placeholder {
+			color: #71767b;
+		}
+    
+		.compose-actions {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 0 16px 12px;
+			border-bottom: 1px solid #2f3336;
+		}
+    
+		.compose-icons {
+			display: flex;
+			gap: 4px;
+		}
+    
+		.compose-icon {
+			width: 36px;
+			height: 36px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			color: #1d9bf0;
+			cursor: pointer;
+			border-radius: 50%;
+			transition: background 0.2s;
+		}
+    
+		.compose-icon:hover {
+			background: rgba(29, 155, 240, 0.1);
+		}
+    
+		.compose-btn {
+			background: #1d9bf0;
+			color: #ffffff;
+			border: none;
+			border-radius: 18px;
+			padding: 8px 16px;
+			font-weight: 700;
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+    
+		.compose-btn:hover {
+			background: #1a8cd8;
+		}
+    
+		/* Tweet */
+		.tweet {
+			padding: 16px;
+			border-bottom: 1px solid #2f3336;
+			display: flex;
+			gap: 12px;
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+    
+		.tweet:hover {
+			background: rgba(255, 255, 255, 0.03);
+		}
+    
+		.tweet-avatar {
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 700;
+			background-size: cover;
+			background-position: center;
+		}
+    
+		.tweet-content {
+			flex: 1;
+			min-width: 0;
+		}
+    
+		.tweet-header {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			margin-bottom: 4px;
+		}
+    
+		.tweet-name {
+			font-weight: 700;
+			font-size: 0.95rem;
+		}
+    
+		.tweet-verified {
+			color: #1d9bf0;
+			font-size: 1.1rem;
+		}
+    
+		.tweet-handle {
+			color: #71767b;
+			font-size: 0.95rem;
+		}
+    
+		.tweet-time {
+			color: #71767b;
+			font-size: 0.95rem;
+		}
+    
+		.tweet-text {
+			font-size: 0.95rem;
+			line-height: 1.4;
+			margin-bottom: 12px;
+			word-wrap: break-word;
+		}
+    
+		.tweet-image {
+			width: 100%;
+			height: 300px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			border-radius: 16px;
+			margin-bottom: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 3rem;
+		}
+    
+		.tweet-actions {
+			display: flex;
+			justify-content: space-between;
+			max-width: 425px;
+			margin-top: 4px;
+		}
+    
+		.tweet-action {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			color: #71767b;
+			font-size: 0.85rem;
+			cursor: pointer;
+			transition: color 0.2s;
+			padding: 8px;
+			border-radius: 50%;
+		}
+    
+		.tweet-action:hover {
+			color: #1d9bf0;
+		}
+    
+		.tweet-action.liked {
+			color: #f91880;
+		}
+    
+		.tweet-action.retweeted {
+			color: #00ba7c;
+		}
+    
+		/* Right Sidebar */
+		.right-sidebar {
+			width: 350px;
+			padding: 0 16px;
+		}
+    
+		.search-box {
+			position: sticky;
+			top: 0;
+			padding: 8px 0;
+			background: #000000;
+			z-index: 10;
+		}
+    
+		.search-input {
+			width: 100%;
+			background: #202327;
+			border: 1px solid transparent;
+			border-radius: 24px;
+			padding: 12px 16px;
+			color: #e7e9ea;
+			font-size: 0.95rem;
+			outline: none;
+			transition: all 0.2s;
+		}
+    
+		.search-input:focus {
+			background: #000000;
+			border-color: #1d9bf0;
+		}
+    
+		.search-input::placeholder {
+			color: #71767b;
+		}
+    
+		.trending-card {
+			background: #16181c;
+			border-radius: 16px;
+			margin-top: 16px;
+			overflow: hidden;
+		}
+    
+		.trending-header {
+			padding: 16px;
+			font-size: 1.25rem;
+			font-weight: 700;
+		}
+    
+		.trending-item {
+			padding: 12px 16px;
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+    
+		.trending-item:hover {
+			background: rgba(255, 255, 255, 0.03);
+		}
+    
+		.trending-category {
+			color: #71767b;
+			font-size: 0.8rem;
+		}
+    
+		.trending-title {
+			font-weight: 700;
+			font-size: 0.95rem;
+			margin: 4px 0;
+		}
+    
+		.trending-count {
+			color: #71767b;
+			font-size: 0.8rem;
+		}
+    
+		@media (max-width: 1024px) {
+			.right-sidebar {
+				display: none;
+			}
+		}
+    
+		@media (max-width: 768px) {
+			.sidebar {
+				width: 68px;
+			}
+      
+			.nav-text {
+				display: none;
+			}
+      
+			.post-btn {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				padding: 0;
+				font-size: 1.5rem;
+			}
+      
+			.user-info {
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<!-- Left Sidebar -->
+		<aside class="sidebar">
+			<div class="logo">𝕏</div>
+      
+			<nav class="nav-items">
+				<a class="nav-item active">
+					<span class="nav-icon">🏠</span>
+					<span class="nav-text">Home</span>
+				</a>
+				<a class="nav-item">
+					<span class="nav-icon">🔍</span>
+					<span class="nav-text">Explore</span>
+				</a>
+				<a class="nav-item">
+					<span class="nav-icon">🔔</span>
+					<span class="nav-text">Notifications</span>
+				</a>
+				<a class="nav-item">
+					<span class="nav-icon">✉️</span>
+					<span class="nav-text">Messages</span>
+				</a>
+				<a class="nav-item">
+					<span class="nav-icon">📋</span>
+					<span class="nav-text">Lists</span>
+				</a>
+				<a class="nav-item">
+					<span class="nav-icon">🔖</span>
+					<span class="nav-text">Bookmarks</span>
+				</a>
+				<a class="nav-item">
+					<span class="nav-icon">👤</span>
+					<span class="nav-text">Profile</span>
+				</a>
+			</nav>
+      
+			<button class="post-btn">Post</button>
+      
+			<div class="user-menu">
+				<div class="user-avatar" style="background-image: url('https://i.pravatar.cc/150?img=67');"></div>
+				<div class="user-info">
+					<div class="user-name">Michael Chen</div>
+					<div class="user-handle">@mchen</div>
+				</div>
+				<span style="font-size: 1.2rem;">⋯</span>
+			</div>
+		</aside>
+    
+		<!-- Main Feed -->
+		<main class="main-feed">
+			<div class="feed-header">
+				<div class="feed-title">Home</div>
+			</div>
+      
+			<div class="feed-tabs">
+				<div class="feed-tab active">For you</div>
+				<div class="feed-tab">Following</div>
+			</div>
+      
+			<div class="compose-tweet">
+				<div class="user-avatar" style="background-image: url('https://i.pravatar.cc/150?img=67');"></div>
+				<textarea class="compose-input" placeholder="What is happening?!" rows="2"></textarea>
+			</div>
+      
+			<div class="compose-actions">
+				<div class="compose-icons">
+					<div class="compose-icon">🖼️</div>
+					<div class="compose-icon">📊</div>
+					<div class="compose-icon">😊</div>
+					<div class="compose-icon">📅</div>
+				</div>
+				<button class="compose-btn">Post</button>
+			</div>
+      
+			<!-- Tweets -->
+			<!-- (Tweets content copied as-is from fake-twitter.html) -->
+			<!-- For brevity, you can keep all the tweet divs here identical to fake-twitter.html -->
+		</main>
+    
+		<!-- Right Sidebar -->
+		<aside class="right-sidebar">
+			<div class="search-box">
+				<input type="text" class="search-input" placeholder="Search" />
+			</div>
+      
+			<div class="trending-card">
+				<div class="trending-header">What's happening</div>
+        
+				<div class="trending-item">
+					<div class="trending-category">Technology · Trending</div>
+					<div class="trending-title">#AI</div>
+					<div class="trending-count">245K posts</div>
+				</div>
+        
+				<div class="trending-item">
+					<div class="trending-category">Business · Trending</div>
+					<div class="trending-title">#Bitcoin</div>
+					<div class="trending-count">187K posts</div>
+				</div>
+        
+				<div class="trending-item">
+					<div class="trending-category">Entertainment · Trending</div>
+					<div class="trending-title">New Movie Release</div>
+					<div class="trending-count">92.5K posts</div>
+				</div>
+        
+				<div class="trending-item">
+					<div class="trending-category">Sports · Live</div>
+					<div class="trending-title">NBA Finals</div>
+					<div class="trending-count">156K posts</div>
+				</div>
+        
+				<div class="trending-item">
+					<div class="trending-category">Politics · Trending</div>
+					<div class="trending-title">#Election2024</div>
+					<div class="trending-count">312K posts</div>
+				</div>
+			</div>
+      
+			<div class="trending-card" style="margin-top: 16px;">
+				<div class="trending-header">Who to follow</div>
+        
+				<div class="trending-item" style="display: flex; align-items: center; gap: 12px;">
+					<div class="tweet-avatar" style="width: 48px; height: 48px; background-image: url('https://i.pravatar.cc/150?img=64');"></div>
+					<div style="flex: 1;">
+						<div class="tweet-name">John Doe</div>
+						<div class="tweet-handle">@johndoe</div>
+					</div>
+					<button class="compose-btn" style="padding: 6px 16px; font-size: 0.9rem;">Follow</button>
+				</div>
+        
+				<div class="trending-item" style="display: flex; align-items: center; gap: 12px;">
+					<div class="tweet-avatar" style="width: 48px; height: 48px; background-image: url('https://i.pravatar.cc/150?img=47');"></div>
+					<div style="flex: 1;">
+						<div class="tweet-name">Alice Lee</div>
+						<div class="tweet-handle">@alicelee</div>
+					</div>
+					<button class="compose-btn" style="padding: 6px 16px; font-size: 0.9rem;">Follow</button>
+				</div>
+			</div>
+		</aside>
+	</div>
+</body>
+</html>
